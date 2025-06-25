@@ -14,10 +14,14 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+
             $table->string('title');
-            $table->integer('price');
-            $table->json('form'[]);
             $table->text('description');
+
+            $table->integer('price');
+            $table->json('form');
+
+            $table->string('image') ;
             $table->timestamps();
         });
     }

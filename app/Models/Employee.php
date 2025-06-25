@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'email',
@@ -16,4 +17,20 @@ class Employee extends Model
         'company_id',
         'position',
     ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // Relationships
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

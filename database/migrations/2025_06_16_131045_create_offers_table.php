@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
+            $table->integer('percent');
+            $table->string('image') ;
+            $table->text('description');
             $table->timestamps();
         });
     }

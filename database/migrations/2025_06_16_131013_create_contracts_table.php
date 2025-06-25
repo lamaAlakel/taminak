@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('service_provider_id')->constrained('service_providers')->cascadeOnDelete() ;
+            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
             $table->timestamps();
         });
     }

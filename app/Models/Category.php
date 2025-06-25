@@ -8,8 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable=[
+
+    protected $fillable = [
         'title',
-        'description',
+        'image',
     ];
+
+    // Relationships
+
+    public function plans()
+    {
+        return $this->belongsToMany(
+            Plan::class,
+            'plan_categories',
+            'category_id',
+            'plan_id'
+        )->withTimestamps();
+    }
 }

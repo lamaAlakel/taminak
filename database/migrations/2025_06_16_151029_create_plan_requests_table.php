@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('plan_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade') ;
+            $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
+            $table->json('data') ;
+            $table->enum('status' , ['pending' , 'approved' , 'rejected']) ;
             $table->timestamps();
         });
     }
