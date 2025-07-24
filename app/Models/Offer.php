@@ -17,7 +17,6 @@ class Offer extends Model
     ];
 
     // Relationships
-
     public function plan()
     {
         return $this->belongsTo(Plan::class);
