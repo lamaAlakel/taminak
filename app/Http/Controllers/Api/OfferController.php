@@ -26,7 +26,7 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'plan_id'     => 'required|integer|exists:plans,id',
+            'plan_id'     => 'required|integer|exists:plans,id|unique:offers,plan_id',
             'percent'     => 'required|integer|min:0|max:100',
             'image'       => 'nullable|string',
             'description' => 'required|string',
