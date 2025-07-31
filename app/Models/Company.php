@@ -29,28 +29,28 @@ class Company extends Authenticatable implements MustVerifyEmail
         'remember_token'
     ];
 
-//    protected $appends = ['average_rate', 'user_rate'];
+    protected $appends = ['average_rate', 'user_rate'];
     // Relationships
-//    public function getAverageRateAttribute()
-//    {
-//        return $this->rates()->avg('rate')
-//            ? round($this->rates()->avg('rate'), 2)
-//            : null;
-//    }
+    public function getAverageRateAttribute()
+    {
+        return $this->rates()->avg('rate')
+            ? round($this->rates()->avg('rate'), 2)
+            : null;
+    }
 
-//    public function getUserRateAttribute()
-//    {
-//        $user = auth()->user();
-//        if (! $user instanceof User) {
-//            return null;
-//        }
-//        $rate = $this->rates()
-//            ->where('user_id', $user->id)
-//            ->first(['id', 'rate']);
-//        return $rate
-//            ? ['id' => $rate->id, 'rate' => $rate->rate]
-//            : null;
-//    }
+    public function getUserRateAttribute()
+    {
+        $user = auth()->user();
+        if (! $user instanceof User) {
+            return null;
+        }
+        $rate = $this->rates()
+            ->where('user_id', $user->id)
+            ->first(['id', 'rate']);
+        return $rate
+            ? ['id' => $rate->id, 'rate' => $rate->rate]
+            : null;
+    }
 
     public function plans()
     {
