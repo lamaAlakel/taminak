@@ -10,6 +10,7 @@ use \App\Http\Controllers\Api\CategoryController ;
 use \App\Http\Controllers\Api\PlanController ;
 use \App\Http\Controllers\Api\ServiceProviderController ;
 use \App\Http\Controllers\Api\OfferController ;
+use \App\Http\Controllers\Api\RateController ;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +33,18 @@ Route::prefix('user')->group(function () {
         Route::post('logout',       [UserAuthController::class, 'logout']);
         Route::get('me',            [UserAuthController::class, 'me']);
         Route::put('profile',       [UserAuthController::class, 'updateProfile']);
+
+        Route::get('offers', [\App\Http\Controllers\Api\User\OfferController::class, 'index']);
+        Route::get('plans', [\App\Http\Controllers\Api\User\PlanController::class, 'index']);
+
+        Route::get('companies', [CompanyController::class, 'index']);
+        Route::get('companies/{company}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCompany']);
+
+        Route::get('categories', [CategoryController::class, 'index']);
+        Route::get('categories/{category}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCategory']);
+
+        Route::apiResource('rates', RateController::class)
+            ->only(['index','store','update','destroy']);
     });
 });
 

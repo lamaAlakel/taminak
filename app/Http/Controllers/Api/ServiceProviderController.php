@@ -40,9 +40,11 @@ class ServiceProviderController extends Controller
         $provider = ServiceProvider::create($data);
 
         // 2) Attach via pivot
-        $request->user()
-            ->serviceProviders()
-            ->attach($provider->id);
+        $company = $request->user();
+
+        $company
+        ->serviceProviders()
+        ->attach($provider->id);
 
         return response()->json($provider, 201);
     }

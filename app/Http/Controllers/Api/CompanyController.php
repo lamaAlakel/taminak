@@ -29,8 +29,6 @@ class CompanyController extends Controller
             'bio'            => 'nullable|string',
         ]);
 
-        // hash password before creating
-        $data['password'] = bcrypt($data['password']);
 
         $company = Company::create($data);
         return response()->json($company, 201);
