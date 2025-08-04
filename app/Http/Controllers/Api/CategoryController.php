@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use FileStorageTrait ;
     // GET /api/admin/categories
     public function index()
     {
@@ -20,8 +22,14 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'required|url',
+            'image' => 'required|file',
         ]);
+
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/category') ;
+            $data['image'] = $image ;
+        }
 
         $category = Category::create($data);
         return response()->json($category, 201);
@@ -38,8 +46,14 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'image' => 'sometimes|required|url',
+            'image' => 'sometimes|required|file',
         ]);
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/category') ;
+            $data['image'] = $image ;
+        }
+
 
         $category->update($data);
         return response()->json($category, 200);

@@ -28,9 +28,15 @@ class OfferController extends Controller
         $data = $request->validate([
             'plan_id'     => 'required|integer|exists:plans,id|unique:offers,plan_id',
             'percent'     => 'required|integer|min:0|max:100',
-            'image'       => 'nullable|string',
+            'image'       => 'nullable|file',
             'description' => 'required|string',
         ]);
+
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/offer') ;
+            $data['image'] = $image ;
+        }
 
         // Ensure plan belongs to this company
         $plan = Plan::findOrFail($data['plan_id']);
@@ -60,10 +66,14 @@ class OfferController extends Controller
 
         $data = $request->validate([
             'percent'     => 'sometimes|required|integer|min:0|max:100',
-            'image'       => 'nullable|string',
+            'image'       => 'nullable|file',
             'description' => 'sometimes|required|string',
         ]);
-
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/offer') ;
+            $data['image'] = $image ;
+        }
         $offer->update($data);
         return response()->json($offer->load('plan'));
     }

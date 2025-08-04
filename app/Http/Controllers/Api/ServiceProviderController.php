@@ -31,10 +31,16 @@ class ServiceProviderController extends Controller
         $data = $request->validate([
             'name'           => 'required|string|max:255',
             'bio'            => 'nullable|string',
-            'image'          => 'nullable|string',
+            'image'          => 'nullable|file',
             'contact_number' => 'required|string',
             'location'       => 'required|string',
         ]);
+
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/serviceProvider') ;
+            $data['image'] = $image ;
+        }
 
         // 1) Create provider record
         $provider = ServiceProvider::create($data);
@@ -75,10 +81,16 @@ class ServiceProviderController extends Controller
         $data = $request->validate([
             'name'           => 'sometimes|required|string|max:255',
             'bio'            => 'nullable|string',
-            'image'          => 'nullable|string',
+            'image'          => 'nullable|file',
             'contact_number' => 'sometimes|required|string',
             'location'       => 'sometimes|required|string',
         ]);
+
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/serviceProvider') ;
+            $data['image'] = $image ;
+        }
 
         $provider->update($data);
 

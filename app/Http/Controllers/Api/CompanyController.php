@@ -25,10 +25,15 @@ class CompanyController extends Controller
             'phone_number'   => 'required|string',
             'address'        => 'required|string',
             'license_number' => 'required|string',
-            'image'          => 'nullable|string',
+            'image'          => 'nullable|file',
             'bio'            => 'nullable|string',
         ]);
 
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/company') ;
+            $data['image'] = $image ;
+        }
 
         $company = Company::create($data);
         return response()->json($company, 201);
@@ -50,12 +55,17 @@ class CompanyController extends Controller
             'phone_number'   => 'sometimes|required|string',
             'address'        => 'sometimes|required|string',
             'license_number' => 'sometimes|required|string',
-            'image'          => 'nullable|string',
+            'image'          => 'nullable|file',
             'bio'            => 'nullable|string',
         ]);
 
         if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
+        }
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/company') ;
+            $data['image'] = $image ;
         }
 
         $company->update($data);

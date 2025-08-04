@@ -33,11 +33,16 @@ class PlanController extends Controller
             'description' => 'required|string',
             'price'       => 'required|integer|min:0',
             'form'        => 'required|array',
-            'image'       => 'nullable|string',
+            'image'       => 'nullable|file',
             'categories'  => 'required|array',
             'categories.*'=> 'exists:categories,id',
         ]);
 
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/plan') ;
+            $data['image'] = $image ;
+        }
         // create plan under this company
         $plan = $company
             ->plans()
@@ -79,11 +84,15 @@ class PlanController extends Controller
             'description' => 'sometimes|required|string',
             'price'       => 'sometimes|required|integer|min:0',
             'form'        => 'sometimes|required|array',
-            'image'       => 'nullable|string',
+            'image'       => 'nullable|file',
             'categories'  => 'sometimes|required|array',
             'categories.*'=> 'exists:categories,id',
         ]);
-
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/plan') ;
+            $data['image'] = $image ;
+        }
         // update fields
         $plan->update(array_filter($data, fn($v, $k) => in_array($k, ['title','description','price','form','image']), true));
 
