@@ -2,15 +2,15 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Api\UserAuthController;
-use \App\Http\Controllers\Api\AdminAuthController ;
-use \App\Http\Controllers\Api\CompanyAuthController ;
-use \App\Http\Controllers\Api\CompanyController ;
-use \App\Http\Controllers\Api\CategoryController ;
-use \App\Http\Controllers\Api\PlanController ;
-use \App\Http\Controllers\Api\ServiceProviderController ;
-use \App\Http\Controllers\Api\OfferController ;
-use \App\Http\Controllers\Api\RateController ;
+use \App\Http\Controllers\Api\User\UserAuthController;
+use \App\Http\Controllers\Api\Admin\AdminAuthController ;
+use \App\Http\Controllers\Api\Company\CompanyAuthController ;
+use \App\Http\Controllers\Api\Admin\CompanyController ;
+use \App\Http\Controllers\Api\Admin\CategoryController ;
+use \App\Http\Controllers\Api\Company\PlanController ;
+use \App\Http\Controllers\Api\Company\ServiceProviderController ;
+use \App\Http\Controllers\Api\Company\OfferController ;
+use \App\Http\Controllers\Api\User\RateController ;
 /*
 |--------------------------------------------------------------------------
 | API Routes

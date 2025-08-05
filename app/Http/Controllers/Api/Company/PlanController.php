@@ -1,7 +1,7 @@
 <?php
 // File: app/Http/Controllers/Company/PlanController.php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;

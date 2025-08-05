@@ -1,22 +1,19 @@
 <?php
-// File: app/Http/Controllers/Admin/CompanyController.php
+// File: app/Http/Controllers/Api/CompanyAuthController.php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
-class CompanyController extends Controller
+class CompanyAuthController extends Controller
 {
-    // GET /api/admin/companies
-    public function index()
-    {
-        return response()->json(Company::all());
-    }
-
-    // POST /api/admin/companies
-    public function store(Request $request)
+    use FileStorageTrait ;
+    /** Register new company */
+    public function register(Request $request)
     {
         $data = $request->validate([
             'name'           => 'required|string|max:255',
@@ -36,18 +33,46 @@ class CompanyController extends Controller
         }
 
         $company = Company::create($data);
-        return response()->json($company, 201);
+        $token = $company->createToken('company_token')->plainTextToken;
+
+        return response()->json(['company' => $company, 'token' => $token], 201);
     }
 
-    // GET /api/admin/companies/{company}
-    public function show(Company $company)
+    /** Login company and issue token */
+    public function login(Request $request)
     {
-        return response()->json($company);
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $company = Company::where('email', $request->email)->first();
+
+        if (! $company || ! Hash::check($request->password, $company->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        $token = $company->createToken('company_token')->plainTextToken;
+        return response()->json(['company' => $company, 'token' => $token]);
     }
 
-    // PUT/PATCH /api/admin/companies/{company}
-    public function update(Request $request, Company $company)
+    /** Logout company */
+    public function logout(Request $request)
     {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out'], 200);
+    }
+
+    /** Get company profile */
+    public function me(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
+    /** Update company profile */
+    public function updateProfile(Request $request)
+    {
+        $company = $request->user();
         $data = $request->validate([
             'name'           => 'sometimes|required|string|max:255',
             'email'          => "sometimes|required|email|unique:companies,email,{$company->id}",
@@ -58,10 +83,6 @@ class CompanyController extends Controller
             'image'          => 'nullable|file',
             'bio'            => 'nullable|string',
         ]);
-
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        }
         if ($request->hasFile('image'))
         {
             $image = $this->storefile($request->file('image') , 'image/company') ;
@@ -70,12 +91,5 @@ class CompanyController extends Controller
 
         $company->update($data);
         return response()->json($company, 200);
-    }
-
-    // DELETE /api/admin/companies/{company}
-    public function destroy(Company $company)
-    {
-        $company->delete();
-        return response()->json(null, 204);
     }
 }
