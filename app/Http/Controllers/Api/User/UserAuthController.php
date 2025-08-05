@@ -46,6 +46,13 @@ class UserAuthController extends Controller
         }
 
         $user = Auth::user();
+
+        if ($user->blocked) {
+            return response()->json([
+                'message' => 'Your account has been blocked. Please contact support.'
+            ], 403);
+        }
+
         $token = $user->createToken('user_token')->plainTextToken;
 
         return response()->json([

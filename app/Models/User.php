@@ -18,6 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'phone_number',
+        'blocked',
     ];
 
     protected $hidden = [
@@ -27,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'blocked'           => 'boolean',
     ];
 
     // Relationships

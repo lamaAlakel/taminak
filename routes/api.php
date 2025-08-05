@@ -11,6 +11,8 @@ use \App\Http\Controllers\Api\Company\PlanController ;
 use \App\Http\Controllers\Api\Company\ServiceProviderController ;
 use \App\Http\Controllers\Api\Company\OfferController ;
 use \App\Http\Controllers\Api\User\RateController ;
+use \App\Http\Controllers\Api\Admin\UserController ;
+use \App\Http\Controllers\Api\Admin\StatisticsController ;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,19 +53,33 @@ Route::prefix('user')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::post('register', [AdminAuthController::class, 'register']);
     Route::post('login',    [AdminAuthController::class, 'login']);
+
     Route::middleware('auth:admin-api')->group(function () {
-        Route::post('logout',       [AdminAuthController::class, 'logout']);
-        Route::get('me',            [AdminAuthController::class, 'me']);
-        Route::put('profile',       [AdminAuthController::class, 'updateProfile']);
+
+        Route::controller(UserController::class)->group(function() {
+            Route::post('logout','logout');
+            Route::get('me','me');
+            Route::put('profile','updateProfile');
+        });
+
+        Route::get('statistics',            [StatisticsController::class, 'index']);
 
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('companies',  CompanyController::class);
+
+        Route::prefix('users')->controller(UserController::class)->group(function(){
+            Route::get('index',         'index'  );
+            Route::post('{id}/block',   'block'  );
+            Route::post('{id}/unblock', 'unblock');
+            Route::delete('{id}',       'destroy');
+        });
     });
 });
 
 Route::prefix('company')->group(function () {
     Route::post('register', [CompanyAuthController::class, 'register']);
     Route::post('login', [CompanyAuthController::class, 'login']);
+
     Route::middleware('auth:company-api')->group(function () {
         Route::post('logout', [CompanyAuthController::class, 'logout']);
         Route::get('me', [CompanyAuthController::class, 'me']);
