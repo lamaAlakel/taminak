@@ -93,5 +93,6 @@ Route::prefix('company')->group(function () {
         Route::apiResource('service-providers', ServiceProviderController::class);
         Route::apiResource('offers', OfferController::class);
         Route::get('categories', [CategoryController::class, 'index']);
+        Route::get('rates', [\App\Http\Controllers\Api\Company\RateController::class, 'index']);
     });
 });
