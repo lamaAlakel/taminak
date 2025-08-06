@@ -17,9 +17,15 @@ class AdController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'image' => 'required|string',
+            'image' => 'required|file',
             'description' => 'required|string',
         ]);
+
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/ad') ;
+            $data['image'] = $image ;
+        }
 
         $ad = Ad::create($data);
 
@@ -34,10 +40,14 @@ class AdController extends Controller
     public function update(Request $request, Ad $ad)
     {
         $data = $request->validate([
-            'image' => 'sometimes|required|string',
+            'image' => 'sometimes|required|file',
             'description' => 'sometimes|required|string',
         ]);
-
+        if ($request->hasFile('image'))
+        {
+            $image = $this->storefile($request->file('image') , 'image/ad') ;
+            $data['image'] = $image ;
+        }
         $ad->update($data);
 
         return new AdResource($ad);
