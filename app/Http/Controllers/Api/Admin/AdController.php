@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdResource;
 use App\Models\Ad;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
 class AdController extends Controller
 {
+    use FileStorageTrait ;
     public function index()
     {
         return AdResource::collection(Ad::all());
