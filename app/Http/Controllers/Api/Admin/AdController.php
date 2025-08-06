@@ -43,13 +43,14 @@ class AdController extends Controller
             'image' => 'sometimes|required|file',
             'description' => 'sometimes|required|string',
         ]);
+
         if ($request->hasFile('image'))
         {
             $image = $this->storefile($request->file('image') , 'image/ad') ;
             $data['image'] = $image ;
         }
-        $ad->update($data);
 
+        $ad->update($data);
         return new AdResource($ad);
     }
 
