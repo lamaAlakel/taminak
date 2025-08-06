@@ -13,6 +13,7 @@ use \App\Http\Controllers\Api\Company\OfferController ;
 use \App\Http\Controllers\Api\User\RateController ;
 use \App\Http\Controllers\Api\Admin\UserController ;
 use \App\Http\Controllers\Api\Admin\StatisticsController ;
+use \App\Http\Controllers\Api\Admin\AdController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,6 +44,8 @@ Route::prefix('user')->group(function () {
         Route::get('companies/{company}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCompany']);
 
         Route::get('categories', [CategoryController::class, 'index']);
+        Route::get('ads', [AdController::class,'index']);
+
         Route::get('categories/{category}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCategory']);
 
         Route::apiResource('rates', RateController::class)
@@ -66,6 +69,7 @@ Route::prefix('admin')->group(function () {
 
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('companies',  CompanyController::class);
+        Route::apiResource('ads', AdController::class);
 
         Route::prefix('users')->controller(UserController::class)->group(function(){
             Route::get('index',         'index'  );
