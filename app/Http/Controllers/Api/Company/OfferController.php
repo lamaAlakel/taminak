@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Company;
 use App\Http\Controllers\Controller;
 use App\Models\Offer;
 use App\Models\Plan;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
 class OfferController extends Controller
 {
+    use FileStorageTrait ;
     /**
      * GET /api/company/offers
      * List all offers for this company.

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
+    use FileStorageTrait;
     /**
      * List all plans belonging to the authenticated company,
      * including their categories.

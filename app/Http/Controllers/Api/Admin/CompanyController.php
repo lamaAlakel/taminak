@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
+    use FileStorageTrait;
     // GET /api/admin/companies
     public function index()
     {

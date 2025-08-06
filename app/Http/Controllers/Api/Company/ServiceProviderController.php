@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceProvider;
+use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
 class ServiceProviderController extends Controller
 {
+    use FileStorageTrait;
     /**
      * GET /api/company/service-providers
      * List all providers this company is contracted with.
