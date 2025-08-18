@@ -47,6 +47,7 @@ Route::prefix('user')->group(function () {
         Route::get('ads', [AdController::class,'index']);
 
         Route::get('categories/{category}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCategory']);
+        Route::get('notifications', [\App\Http\Controllers\Api\Admin\NotificationController::class, 'index']);
 
         Route::apiResource('rates', RateController::class)
             ->only(['index','store','update','destroy']);
@@ -70,6 +71,7 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('companies',  CompanyController::class);
         Route::apiResource('ads', AdController::class);
+        Route::post('notifications/send-to-user', [\App\Http\Controllers\Api\Admin\NotificationController::class, 'sendToUser']);
 
         Route::prefix('users')->controller(UserController::class)->group(function(){
             Route::get('index',         'index'  );

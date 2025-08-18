@@ -85,4 +85,16 @@ class Company extends Authenticatable implements MustVerifyEmail
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
+    public function offers()
+    {
+        return $this->hasManyThrough(
+            Offer::class,   // final model
+            Plan::class,    // through model
+            'company_id',   // FK on plans table referencing companies.id
+            'plan_id',      // FK on offers table referencing plans.id
+            'id',           // local key on companies table
+            'id'            // local key on plans table
+        );
+    }
 }
