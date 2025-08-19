@@ -46,6 +46,7 @@ Route::prefix('user')->group(function () {
         Route::get('categories', [CategoryController::class, 'index']);
         Route::get('ads', [AdController::class,'index']);
 
+        Route::get('companies/{company}/service-providers', [\App\Http\Controllers\Api\User\ServiceProviderController::class, 'index']);
         Route::get('categories/{category}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCategory']);
         Route::get('notifications', [\App\Http\Controllers\Api\Admin\NotificationController::class, 'index']);
 

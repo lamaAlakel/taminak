@@ -35,7 +35,7 @@ class PlanController extends Controller
             'description' => 'required|string',
             'price'       => 'required|integer|min:0',
             'form'        => 'required|array',
-            'image'       => 'nullable|file',
+            'image'       => 'required|file',
             'categories'  => 'required|array',
             'categories.*'=> 'exists:categories,id',
         ]);
