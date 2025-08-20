@@ -36,6 +36,8 @@ class ServiceProviderController extends Controller
             'image'          => 'nullable|file',
             'contact_number' => 'required|string',
             'location'       => 'required|string',
+            'lat'            => 'nullable',
+            'lng'            => 'nullable'
         ]);
 
         if ($request->hasFile('image'))

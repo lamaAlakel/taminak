@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('image') ;
             $table->string('contact_number');
             $table->string('location') ;
+            $table->string('lat')->nullable() ;
+            $table->string('lng')->nullable() ;
             $table->timestamps();
         });
     }

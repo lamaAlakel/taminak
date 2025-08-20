@@ -15,6 +15,8 @@ class ServiceProvider extends Model
         'image',
         'contact_number',
         'location',
+        'lat' ,
+        'lng'
     ];
 
     // Relationships
