@@ -49,6 +49,7 @@ Route::prefix('user')->group(function () {
         Route::get('companies/{company}/service-providers', [\App\Http\Controllers\Api\User\ServiceProviderController::class, 'index']);
         Route::get('categories/{category}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCategory']);
         Route::get('notifications', [\App\Http\Controllers\Api\Admin\NotificationController::class, 'index']);
+        Route::post('/plans/{plan}/requests', [\App\Http\Controllers\Api\User\PlanRequestController::class, 'store']);
 
         Route::apiResource('rates', RateController::class)
             ->only(['index','store','update','destroy']);
