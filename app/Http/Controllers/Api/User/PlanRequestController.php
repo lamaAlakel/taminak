@@ -66,6 +66,7 @@ class PlanRequestController extends Controller
                 'user_id'        => $user->id,
                 'plan_id'        => $plan->id,
                 'submitted_form' => $filtered,
+                'status'         => 'pending'
             ]);
         });
 
