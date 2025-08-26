@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('plan_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade') ;
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
-            $table->json('data') ;
+            $table->json('submitted_form');
             $table->enum('status' , ['pending' , 'approved' , 'rejected']) ;
             $table->timestamps();
         });
