@@ -14,7 +14,7 @@ class PlanRequest extends Model
     protected $fillable = [
         'user_id',
         'plan_id',
-        'data',
+        'submitted_form',
         'status',
     ];
 
