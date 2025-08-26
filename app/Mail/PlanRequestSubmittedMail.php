@@ -6,25 +6,36 @@ use App\Models\PlanRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-// (Optional) implements ShouldQueue for background sending.
+// use Illuminate\Contracts\Queue\ShouldQueue; // (optional) queue it
 
-class PlanRequestSubmittedMail extends Mailable
+class PlanRequestSubmittedMail extends Mailable /* implements ShouldQueue */
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public PlanRequest $planRequest) {}
+    public function __construct(
+        public PlanRequest $planRequest,
+        public ?string $manageUrl = null
+    ) {}
 
     public function build(): self
     {
-        $plan   = $this->planRequest->plan;
-        $user   = $this->planRequest->user;
+        $plan    = $this->planRequest->plan;
+        $user    = $this->planRequest->user;
+        $company = $plan->company;
 
-        return $this->subject("New Plan Request: {$plan->title} by {$user->name}")
-            ->markdown('emails.plan_request_submitted', [
-                'plan'   => $plan,
-                'user'   => $user,
-                'data'   => $this->planRequest->submitted_form,
-                'pr'     => $this->planRequest,
+        return $this->subject('New Plan Request · ' . $plan->title)
+            ->view('emails.plan_request_submitted_html')
+            ->text('emails.plan_request_submitted_text')
+            ->with([
+                'plan'       => $plan,
+                'user'       => $user,
+                'company'    => $company,
+                'data'       => $this->planRequest->submitted_form,
+                'submittedAt'=> $this->planRequest->created_at,
+                'manageUrl'  => $this->manageUrl
+                    ?? url("/admin/plans/{$plan->id}/requests/{$this->planRequest->id}"),
+                'appName'    => config('app.name'),
+                'appUrl'     => config('app.url'),
             ]);
     }
 }
