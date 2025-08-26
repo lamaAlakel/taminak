@@ -19,7 +19,7 @@ class PlanRequest extends Model
     ];
 
     protected $casts = [
-        'data'   => 'array',
+        'submitted_form'   => 'array',
         'status' => 'string',
     ];
 
