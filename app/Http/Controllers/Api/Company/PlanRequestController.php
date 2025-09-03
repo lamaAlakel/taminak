@@ -18,7 +18,7 @@ class PlanRequestController extends Controller
     protected function companyId(): int
     {
         // Adapt if your auth user resolves company differently
-        return (int) Auth::user()->company_id;
+        return (int) Auth::id();
     }
 
     // 1) List all plan requests for this company (optional status filter)
