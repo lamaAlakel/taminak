@@ -82,7 +82,7 @@ class NotificationController extends Controller
     }
     public function index(Request $request)
     {
-        $notifications = $request->user()->notifications()->get();
+        $notifications = $request->user()->notifications()->latest()->get();
         return response()->json($notifications);
     }
 }
