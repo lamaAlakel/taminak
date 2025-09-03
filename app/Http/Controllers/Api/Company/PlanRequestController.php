@@ -25,7 +25,6 @@ class PlanRequestController extends Controller
     public function index(Request $request): JsonResponse
     {
         $status  = $request->query('status'); // pending|approved|rejected (optional)
-        $perPage = max(1, (int)$request->query('per_page', 15));
 
         $q = PlanRequest::with(['user','plan'])
             ->whereHas('plan', fn($p) => $p->where('company_id', $this->companyId()))
@@ -35,7 +34,7 @@ class PlanRequestController extends Controller
             $q->where('status', $status);
         }
 
-        return response()->json($q->paginate($perPage));
+        return response()->json($q->get());
     }
 
     // 2) List requests for a specific plan (must belong to this company)
