@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Mail\PlanRequestApprovedMail;
+use App\Models\Notification;
 use App\Models\Plan;
 use App\Models\PlanRequest;
 use App\Services\FirebaseNotificationService;
@@ -79,6 +80,11 @@ class PlanRequestController extends Controller
         if ($planRequest->user->fcm_token)
             FirebaseNotificationService::sendNotification($title , $body, $planRequest->user->fcm_token) ;
 
+        Notification::create([
+            'title' => $title ,
+            'body' => $body ,
+            'user_id'   => $planRequest->user_id
+        ]);
        return response()->json(['status' => 'ok', 'message' => 'Request approved.']);
     }
 
