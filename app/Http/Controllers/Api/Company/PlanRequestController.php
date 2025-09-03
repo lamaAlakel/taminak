@@ -43,7 +43,6 @@ class PlanRequestController extends Controller
         abort_if($plan->company_id !== $this->companyId(), 403);
 
         $status  = $request->query('status');
-        $perPage = max(1, (int)$request->query('per_page', 15));
 
         $q = PlanRequest::with(['user','plan'])
             ->where('plan_id', $plan->id)
@@ -53,7 +52,7 @@ class PlanRequestController extends Controller
             $q->where('status', $status);
         }
 
-        return response()->json($q->paginate($perPage));
+        return response()->json($q->get());
     }
 
     // Accept -> set status=approved and email the user
