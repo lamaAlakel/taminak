@@ -76,8 +76,10 @@ class PlanRequestController extends Controller
         $title = 'Your plan request was approved';
         $body  = "Your request for \"{$planRequest->plan->title}\" was approved by {$companyName}.";
 
-        FirebaseNotificationService::sendNotification($title , $body, $planRequest->user->fcm_token) ;
-        return response()->json(['status' => 'ok', 'message' => 'Request approved.']);
+        if ($planRequest->user->fcm_token)
+            FirebaseNotificationService::sendNotification($title , $body, $planRequest->user->fcm_token) ;
+
+       return response()->json(['status' => 'ok', 'message' => 'Request approved.']);
     }
 
     // Reject -> set status=rejected (no extra columns, email optional)
