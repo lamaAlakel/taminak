@@ -84,4 +84,19 @@ class PlanRequestController extends Controller
             ],
         ], 201);
     }
+    public function myRequests(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $userId  = Auth::id();
+        $status  = $request->query('status'); // optional: pending|approved|rejected
+
+        $q = PlanRequest::with(['plan.company'])
+            ->where('user_id', $userId)
+            ->latest();
+
+        if ($status) {
+            $q->where('status', $status);
+        }
+
+        return response()->json($q->get());
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\User\PlanRequestController as UserPR;
+use App\Http\Controllers\Api\Company\PlanRequestController as CompanyPR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\User\UserAuthController;
@@ -50,6 +52,7 @@ Route::prefix('user')->group(function () {
         Route::get('categories/{category}/plans', [\App\Http\Controllers\Api\User\PlanController::class, 'plansByCategory']);
         Route::get('notifications', [\App\Http\Controllers\Api\Admin\NotificationController::class, 'index']);
         Route::post('/plans/{plan}/requests', [\App\Http\Controllers\Api\User\PlanRequestController::class, 'store']);
+        Route::get('/plan-requests', [UserPR::class, 'myRequests']);
 
         Route::apiResource('rates', RateController::class)
             ->only(['index','store','update','destroy']);
@@ -98,5 +101,11 @@ Route::prefix('company')->group(function () {
         Route::apiResource('offers', OfferController::class);
         Route::get('categories', [CategoryController::class, 'index']);
         Route::get('rates', [\App\Http\Controllers\Api\Company\RateController::class, 'index']);
+
+        Route::get('/plan-requests', [CompanyPR::class, 'index']);
+        Route::get('/plans/{plan}/plan-requests', [CompanyPR::class, 'byPlan']);
+
+        Route::post('/plan-requests/{planRequest}/accept', [CompanyPR::class, 'accept']);
+        Route::post('/plan-requests/{planRequest}/reject', [CompanyPR::class, 'reject']);
     });
 });
