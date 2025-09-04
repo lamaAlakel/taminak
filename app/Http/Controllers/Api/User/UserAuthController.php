@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserAuthController extends Controller
 {
@@ -20,11 +21,30 @@ class UserAuthController extends Controller
     {
         $data = $request->validate([
             'name'         => 'required|string|max:255',
-            'email'        => 'required|email|unique:users,email',
+            // email must be unique among VERIFIED users; allows reuse if an unverified record exists
+            'email'        => ['required','email', Rule::unique('users', 'email')->whereNotNull('email_verified_at')],
             'password'     => 'required|string|min:8|confirmed',
             'phone_number' => 'nullable|string',
         ]);
 
+        // If an unverified account with this email exists, update its info instead of failing
+        $existing = User::where('email', $data['email'])->first();
+
+        if ($existing && ! $existing->hasVerifiedEmail()) {
+            $existing->fill([
+                'name'         => $data['name'],
+                'password'     => Hash::make($data['password']),
+                'phone_number' => $data['phone_number'] ?? $existing->phone_number,
+            ])->save();
+
+            $existing->notify(new VerifyEmailNotification());
+
+            return response()->json([
+                'message' => 'Account info updated. Verification email resent.',
+            ], 200);
+        }
+
+        // Otherwise create a fresh account
         $user = User::create([
             'name'         => $data['name'],
             'email'        => $data['email'],
@@ -38,6 +58,7 @@ class UserAuthController extends Controller
             'message' => 'Registered successfully. Verification email sent.',
         ], 201);
     }
+
 
     /**
      * Verify email from signed URL
