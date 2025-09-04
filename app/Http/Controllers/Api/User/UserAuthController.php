@@ -33,7 +33,7 @@ class UserAuthController extends Controller
         if ($existing && ! $existing->hasVerifiedEmail()) {
             $existing->fill([
                 'name'         => $data['name'],
-                'password'     => Hash::make($data['password']),
+                'password'     => $data['password'],
                 'phone_number' => $data['phone_number'] ?? $existing->phone_number,
             ])->save();
 
