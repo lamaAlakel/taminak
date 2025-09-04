@@ -71,9 +71,9 @@ Route::prefix('admin')->group(function () {
     Route::post('login',    [AdminAuthController::class, 'login']);
 
     Route::middleware('auth:admin-api')->group(function () {
+        Route::post('logout',       [AdminAuthController::class, 'logout']);
 
         Route::controller(UserController::class)->group(function() {
-            Route::post('logout','logout');
             Route::get('me','me');
             Route::put('profile','updateProfile');
         });
