@@ -34,7 +34,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('user')->group(function () {
     Route::post('register', [UserAuthController::class, 'register']);
     Route::post('login',    [UserAuthController::class, 'login']);
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/verify/{id}/{hash}', [UserAuthController::class, 'verify'])
+        ->name('verification.verify')
+        ->middleware(['signed', 'throttle:6,1']);
+
+    Route::post('/email/resend', [UserAuthController::class, 'resendVerification'])
+        ->middleware(['throttle:6,1']);
+
+    Route::middleware(['auth:sanctum','verified'])->group(function () {
         Route::post('logout',       [UserAuthController::class, 'logout']);
         Route::get('me',            [UserAuthController::class, 'me']);
         Route::put('profile',       [UserAuthController::class, 'updateProfile']);
