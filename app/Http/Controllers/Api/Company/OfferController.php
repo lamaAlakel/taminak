@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Company;
 use App\Http\Controllers\Controller;
 use App\Models\Offer;
 use App\Models\Plan;
+use App\Models\User;
+use App\Services\FirebaseNotificationService;
 use App\Traits\FileStorageTrait;
 use Illuminate\Http\Request;
 
@@ -34,10 +36,9 @@ class OfferController extends Controller
             'description' => 'required|string',
         ]);
 
-        if ($request->hasFile('image'))
-        {
-            $image = $this->storefile($request->file('image') , 'image/offer') ;
-            $data['image'] = $image ;
+        if ($request->hasFile('image')) {
+            $image = $this->storefile($request->file('image'), 'image/offer');
+            $data['image'] = $image;
         }
 
         // Ensure plan belongs to this company
@@ -47,6 +48,20 @@ class OfferController extends Controller
         }
 
         $offer = Offer::create($data);
+
+        // 🔔 Send notification to all users with fcm_token
+        $deviceTokens = User::whereNotNull('fcm_token')
+            ->pluck('fcm_token')
+            ->toArray();
+
+        if (!empty($deviceTokens)) {
+            FirebaseNotificationService::sendNotificationToMultipleDevices(
+                'New Offer Available 🎉',
+                $offer->description, // or a custom message
+                $deviceTokens
+            );
+        }
+
         return response()->json($offer->load('plan'), 201);
     }
 
